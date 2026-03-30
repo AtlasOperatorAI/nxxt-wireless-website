@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://atlasoperatorai.github.io/nxxt-wireless-website/sitemap.xml
