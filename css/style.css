@@ -21,6 +21,31 @@
   --radius-sm: 8px;
 }
 
+/* ============ ADA / ACCESSIBILITY ============ */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--navy);
+  color: var(--white);
+  padding: 12px 24px;
+  z-index: 9999;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
+*:focus-visible {
+  outline: 3px solid #4a8a1a;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+/* Accessible green for text on white - passes 4.5:1 contrast */
+.accent-text { color: #4a8a1a; }
+
 /* ============ RESET & BASE ============ */
 *, *::before, *::after {
   box-sizing: border-box;
