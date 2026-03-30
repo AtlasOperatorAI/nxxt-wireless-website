@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Careers — NXXT Mobile</title>
+  <meta name="description" content="Join the NXXT Mobile team. Become an independent agent and help underserved communities get connected with free wireless service.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .hero { background: linear-gradient(135deg, #0a1628 0%, #162a4a 100%); padding: 80px 0; text-align: center; }
+    .hero h1 { font-size: 2.8rem; font-weight: 900; color: var(--white); margin-bottom: 20px; }
+    .hero p { font-size: 1.1rem; color: rgba(255,255,255,0.9); max-width: 600px; margin: 0 auto; }
+    .content-section { padding: 80px 0; }
+    .section-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 40px; text-align: center; }
+    .form-container { max-width: 800px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ====== NAVIGATION ====== -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="container nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="../images/nxxt-logo.jpg" alt="NXXT Mobile" style="height:45px;width:auto;"></a>
+    <ul class="nav-links" role="list">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../index.html#qualify">Check Eligibility</a></li>
+      <li><a href="/pages/shop-plans.html" style="color: var(--green); font-weight: 600;">Shop Plans</a></li>
+      <li><a href="/pages/about-lifeline.html">About Lifeline</a></li>
+      <li><a href="/pages/contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" role="navigation" aria-label="Mobile navigation">
+    <a href="../index.html">Home</a>
+    <a href="../index.html#qualify">Check Eligibility</a>
+    <a href="/pages/shop-plans.html" style="color: var(--green); font-weight: 600;">Shop Plans</a>
+    <a href="/pages/about-lifeline.html">About Lifeline</a>
+    <a href="/pages/contact.html">Contact</a>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<!-- ====== HERO ====== -->
+<section class="hero" aria-labelledby="page-title">
+  <div class="container">
+    <h1 id="page-title">Careers</h1>
+    <p>Join us in helping underserved communities get connected! Become an independent agent and make a real difference.</p>
+  </div>
+</section>
+
+<!-- ====== MISSION ====== -->
+<section class="content-section" style="background: var(--gray-light);">
+  <div class="container">
+    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+      <h2 class="section-title">Why Join NXXT Mobile?</h2>
+      <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-dark); margin-bottom: 40px;">
+        We understand the importance of being able to stay in touch with family, having communication for job opportunities, and having a phone in case of emergencies. Our mission is to connect underserved communities with affordable wireless service through the federal Lifeline program.
+      </p>
+      <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-dark);">
+        As an NXXT Mobile agent, you'll help families access this critical service while earning competitive commissions.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FORM ====== -->
+<section class="content-section">
+  <div class="container">
+    <div class="form-container">
+      <h2 style="text-align: center; margin-bottom: 40px; font-size: 1.8rem; font-weight: 900;">Become an Independent Agent</h2>
+      <iframe id="JotFormIframe-240123032252033" title="Careers Application Form" onload="window.parent.scrollTo(0,0)" allowtransparency="true" allowfullscreen="true" allow="geolocation; microphone; camera; payment" name="JotFormIframe-240123032252033" src="https://form.jotform.com/240123032252033" frameborder="0" style="width:1px;min-width:100%;height:1500px;border:none;" scrolling="no"></iframe>
+      <script type="text/javascript">
+        var ifr = document.getElementById("JotFormIframe-240123032252033");
+        if(ifr) {
+          var src = ifr.src;
+          var iframeParams = [];
+          if (window.location.href && window.location.href.indexOf("?") > -1) {
+            iframeParams = window.location.href.substr(window.location.href.indexOf("?")+1).split('&');
+            for (var i = 0; i < iframeParams.length; i++) {
+              if (iframeParams[i] !== "") {
+                if(src.indexOf("?") > -1)
+                  src += "&"+iframeParams[i];
+                else
+                  src += "?"+iframeParams[i];
+              }
+            }
+          }
+          ifr.src = src;
+        }
+        window.handleIFrameMessage = function(e) {
+          if (typeof e.data === 'object') { return; }
+          var args = e.data.split("|");
+          if (args.length > 2) {
+            switch (args[0]) {
+              case "scrollToHeight":
+                var strValue = args[1];
+                if( strValue.search("!")>-1 ){
+                  strValue = strValue.replace("!", "");
+                  var iframeElement = document.getElementById("JotFormIframe-" + strValue.substring(0, strValue.indexOf("_")));
+                  iframeElement.style.height = strValue.substring(strValue.indexOf("_")+1) + "px";
+                }
+                break;
+              case "addPageToMs":
+                addPageToMSiteCount(args[2]);
+                break;
+              case "replaceOverlay":
+                if(args[1]==="dispose") {
+                  document.getElementById("overlay").style.display = "none";
+                }
+                break;
+              case "closeForm":
+                document.getElementById("JotFormIframe-240123032252033").style.display = "none";
+                break;
+            }
+          }
+        };
+        window.isIframeMessage = function(event){
+          if (typeof event.data === 'string') { return true; }
+          return false;
+        };
+        if (window.addEventListener) {
+          window.addEventListener("message", function(e) {
+            if (window.isIframeMessage(e)) { window.handleIFrameMessage(e); }
+          }, false);
+        } else if (window.attachEvent) {
+          window.attachEvent("onmessage", function(e) {
+            if (window.isIframeMessage(e)) { window.handleIFrameMessage(e); }
+          });
+        }
+      </script>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ====== FOOTER ====== -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../index.html" class="nav-logo"><img src="../images/nxxt-logo.jpg" alt="NXXT Mobile" style="height:45px;width:auto;"></a>
+        <p>NXXT Mobile connects qualifying households to free wireless service through authorized ETC partners under the federal Lifeline program.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#qualify">Check Eligibility</a></li>
+          <li><a href="/pages/shop-plans.html">Shop Plans</a></li>
+          <li><a href="/pages/about-lifeline.html">About Lifeline</a></li>
+          <li><a href="/pages/contact.html">Contact</a></li>
+          <li><a href="/pages/agent-onboarding.html">Agent Onboarding</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="tel:18887006998">📞 1-888-700-6998</a></li>
+          <li><a href="mailto:info@nxxtcom.com">✉️ info@nxxtcom.com</a></li>
+          <li><a href="/pages/contact.html">Chat with us</a></li>
+          <li>M–F 9AM–5PM CT</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 NXXT Mobile LLC. All rights reserved.</p>
+      <p class="footer-disclaimer">Lifeline is a federal benefit program administered by USAC. NXXT Mobile is an authorized Lifeline distributor.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.querySelector('.nav-hamburger').addEventListener('click', function() {
+  const menu = document.querySelector('.nav-mobile');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+});
+</script>
+
+</body>
+</html>
