@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Plans — NXXT Mobile Prepaid Wireless</title>
+  <meta name="description" content="Choose your perfect prepaid wireless plan. Unlimited talk & text, flexible data options, no contracts. T-Mobile powered. Starting at $10/month.">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin: 48px 0; }
+    .plan-card { background: var(--white); border: 2px solid var(--gray-mid); border-radius: var(--radius); padding: 32px; text-align: center; transition: all 0.3s; position: relative; }
+    .plan-card:hover { border-color: var(--green); box-shadow: 0 8px 24px rgba(124, 194, 66, 0.15); transform: translateY(-4px); }
+    .plan-card.featured { border-color: var(--green); background: linear-gradient(135deg, rgba(124, 194, 66, 0.05) 0%, transparent 100%); }
+    .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--green); color: var(--white); padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+    .plan-price { font-size: 2.5rem; font-weight: 800; color: var(--navy); margin: 16px 0; }
+    .plan-period { color: var(--gray-text); font-size: 0.95rem; }
+    .plan-data { font-size: 1.1rem; font-weight: 600; color: var(--green); margin: 16px 0 24px; }
+    .plan-features { list-style: none; padding: 0; margin: 24px 0; text-align: left; }
+    .plan-features li { padding: 8px 0; color: var(--text-dark); border-bottom: 1px solid var(--gray-mid); }
+    .plan-features li:before { content: "✓ "; color: var(--green); font-weight: 700; margin-right: 8px; }
+    .plan-features li:last-child { border-bottom: none; }
+    .plan-btn { width: 100%; margin-top: 24px; }
+    .plan-type-toggle { display: flex; gap: 12px; justify-content: center; margin-bottom: 48px; }
+    .toggle-btn { padding: 12px 24px; border: 2px solid var(--gray-mid); background: var(--white); color: var(--text-dark); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+    .toggle-btn.active { background: var(--green); color: var(--white); border-color: var(--green); }
+    .cart-panel { position: fixed; right: -400px; top: 0; width: 400px; height: 100vh; background: var(--white); box-shadow: var(--shadow-lg); padding: 24px; overflow-y: auto; transition: right 0.3s; z-index: 1000; border-left: 1px solid var(--gray-mid); }
+    .cart-panel.open { right: 0; }
+    .cart-toggle { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: var(--white); border: none; width: 56px; height: 56px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; box-shadow: var(--shadow-lg); z-index: 999; transition: all 0.3s; }
+    .cart-toggle:hover { transform: scale(1.1); }
+    .cart-badge { position: absolute; top: -8px; right: -8px; background: var(--navy); color: var(--white); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
+    .cart-item { padding: 16px; border: 1px solid var(--gray-mid); border-radius: 8px; margin-bottom: 12px; }
+    .cart-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .cart-item-remove { background: none; border: none; color: #d32f2f; cursor: pointer; font-weight: 600; }
+    .cart-total { padding-top: 16px; border-top: 2px solid var(--green); margin-top: 24px; font-size: 1.3rem; font-weight: 700; }
+    .checkout-section { margin-top: 24px; }
+    .payment-form { margin-top: 24px; }
+    #card-element { border: 1px solid var(--gray-mid); padding: 12px; border-radius: 8px; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; }
+    .modal-overlay.active { display: flex; align-items: center; justify-content: center; }
+    .modal { background: var(--white); padding: 40px; border-radius: var(--radius); max-width: 500px; width: 90%; }
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ====== NAVIGATION ====== -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo"><img src="images/nxxt-logo.jpg" alt="NXXT Mobile" style="height:45px;width:auto;"></a>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About Lifeline</a></li>
+      <li><a href="products.html" style="color: var(--green); font-weight: 600;">Shop Plans</a></li>
+      <li><a href="agents.html">Become an Agent</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" role="navigation" aria-label="Mobile navigation">
+    <a href="index.html">Home</a>
+    <a href="about.html">About Lifeline</a>
+    <a href="products.html" style="color: var(--green); font-weight: 600;">Shop Plans</a>
+    <a href="agents.html">Become an Agent</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<!-- ====== HERO ====== -->
+<section class="hero" aria-labelledby="products-title">
+  <div class="container">
+    <h1 id="products-title">Choose Your Perfect Plan</h1>
+    <p>Unlimited talk & text + flexible data. No contracts, no hidden fees. Powered by T-Mobile.</p>
+  </div>
+</section>
+
+<!-- ====== PLAN TYPE TOGGLE ====== -->
+<section class="section" aria-labelledby="plan-type-heading">
+  <div class="container">
+    <h2 id="plan-type-heading" style="text-align: center; margin-bottom: 24px;">Monthly or Annual?</h2>
+    <div class="plan-type-toggle">
+      <button class="toggle-btn active" onclick="showPlans('monthly')">Monthly Plans</button>
+      <button class="toggle-btn" onclick="showPlans('annual')">Annual Plans (Save 17%)</button>
+    </div>
+
+    <!-- ====== MONTHLY PLANS ====== -->
+    <div id="monthly-plans" class="products-grid">
+      <div class="plan-card">
+        <h3>Flex 1.5GB</h3>
+        <div class="plan-price">$10</div>
+        <div class="plan-period">per month</div>
+        <div class="plan-data">1.5GB 5G/4G LTE</div>
+        <ul class="plan-features">
+          <li>Unlimited Talk & Text</li>
+          <li>T-Mobile Network</li>
+          <li>Use Your Own Phone</li>
+          <li>No Contracts</li>
+          <li>No Activation Fees</li>
+        </ul>
+        <button class="btn btn-primary plan-btn" onclick="addToCart('monthly-1.5gb', 'Flex 1.5GB', 10, 'monthly')">Add to Cart</button>
+      </div>
+
+      <div class="plan-card">
+        <h3>Flex 5GB</h3>
+        <div class="plan-price">$12.50</div>
+        <div class="plan-period">per month</div>
+        <div class="plan-data">5GB 5G/4G LTE</div>
+        <ul class="plan-features">
+          <li>Unlimited Talk & Text</li>
+          <li>T-Mobile Network</li>
+          <li>Use Your Own Phone</li>
+          <li>No Contracts</li>
+          <li>No Activation Fees</li>
+        </ul>
+        <button class="btn btn-primary plan-btn" onclick="addToCart('monthly-5gb', 'Flex 5GB', 12.50, 'monthly')">Add to Cart</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <h3>Flex Unlimited</h3>
+        <div class="plan-price">$35</div>
+        <div class="plan-period">per month</div>
+        <div class="plan-data">Unlimited 5G/4G LTE</div>
+        <ul class="plan-features">
+          <li>Unlimited Talk & Text</li>
+          <li>Unlimited Data</li>
+          <li>T-Mobile Network</li>
+          <li>Use Your Own Phone</li>
+          <li>No Contracts</li>
+        </ul>
+        <button class="btn btn-primary plan-btn" onclick="addToCart('monthly-unlimited', 'Flex Unlimited', 35, 'monthly')">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- ====== ANNUAL PLANS ====== -->
+    <div id="annual-plans" class="products-grid" style="display: none;">
+      <div class="plan-card">
+        <h3>Flex 1.5GB</h3>
+        <div class="plan-price">$10</div>
+        <div class="plan-period">per month, billed annually</div>
+        <div class="plan-data">1.5GB 5G/4G LTE</div>
+        <ul class="plan-features">
+          <li>Unlimited Talk & Text</li>
+          <li>T-Mobile Network</li>
+          <li>Use Your Own Phone</li>
+          <li>No Contracts</li>
+          <li>Save on Annual Billing</li>
+        </ul>
+        <button class="btn btn-primary plan-btn" onclick="addToCart('annual-1.5gb', 'Flex 1.5GB (Annual)', 120, 'annual')">Add to Cart</button>
+      </div>
+
+      <div class="plan-card">
+        <h3>Flex 5GB</h3>
+        <div class="plan-price">$12.50</div>
+        <div class="plan-period">per month, billed annually</div>
+        <div class="plan-data">5GB 5G/4G LTE</div>
+        <ul class="plan-features">
+          <li>Unlimited Talk & Text</li>
+          <li>T-Mobile Network</li>
+          <li>Use Your Own Phone</li>
+          <li>No Contracts</li>
+          <li>Save on Annual Billing</li>
+        </ul>
+        <button class="btn btn-primary plan-btn" onclick="addToCart('annual-5gb', 'Flex 5GB (Annual)', 150, 'annual')">Add to Cart</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <h3>Flex Unlimited</h3>
+        <div class="plan-price">$29</div>
+        <div class="plan-period">per month, billed annually</div>
+        <div class="plan-data">Unlimited 5G/4G LTE</div>
+        <ul class="plan-features">
+          <li>Unlimited Talk & Text</li>
+          <li>Unlimited Data</li>
+          <li>T-Mobile Network</li>
+          <li>Use Your Own Phone</li>
+          <li>No Contracts</li>
+        </ul>
+        <button class="btn btn-primary plan-btn" onclick="addToCart('annual-unlimited', 'Flex Unlimited (Annual)', 348, 'annual')">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FEATURES SECTION ====== -->
+<section class="section section-gray">
+  <div class="container">
+    <div class="text-center">
+      <h2>Why Choose NXXT Mobile?</h2>
+      <p style="margin-bottom: 40px;">Industry-leading service, backed by the T-Mobile network.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">🚫</div>
+        <h3>No Credit Check</h3>
+        <p>Get connected regardless of credit history</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📋</div>
+        <h3>No Contracts</h3>
+        <p>Cancel anytime, no early termination fees</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">💰</div>
+        <h3>No Hidden Fees</h3>
+        <p>What you see is what you pay</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📱</div>
+        <h3>Bring Your Phone</h3>
+        <p>Use any unlocked device</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📡</div>
+        <h3>5G/4G LTE Network</h3>
+        <p>Fast, reliable, nationwide coverage</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⚡</div>
+        <h3>Instant Activation</h3>
+        <p>Get connected in minutes</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== CTA SECTION ====== -->
+<section class="cta-band" aria-label="Questions about plans">
+  <div class="container">
+    <h2>Questions About Our Plans?</h2>
+    <p>Our team is here to help. Contact us anytime.</p>
+    <a href="contact.html" class="btn btn-dark btn-lg">Get Support →</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ====== CART PANEL ====== -->
+<div class="cart-panel" id="cart-panel">
+  <h2>Shopping Cart</h2>
+  <div id="cart-items"></div>
+  <div class="cart-total" id="cart-total" style="display: none;">
+    Total: <span id="total-amount">$0.00</span>
+  </div>
+  <div class="checkout-section" id="checkout-section" style="display: none;">
+    <h3 style="margin-top: 24px;">Checkout</h3>
+    <form id="payment-form" class="payment-form">
+      <div style="margin-bottom: 16px;">
+        <label for="email" style="display: block; margin-bottom: 8px; font-weight: 600;">Email</label>
+        <input type="email" id="email" placeholder="your@email.com" required style="width: 100%; padding: 12px; border: 1px solid var(--gray-mid); border-radius: 8px;">
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label for="card-element" style="display: block; margin-bottom: 8px; font-weight: 600;">Card Details</label>
+        <div id="card-element"></div>
+        <div id="card-errors" style="color: #d32f2f; margin-top: 8px;"></div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%;">Pay Now</button>
+    </form>
+  </div>
+  <div id="empty-cart-msg" style="text-align: center; color: var(--gray-text); padding: 40px 0;">
+    <p>Your cart is empty</p>
+    <p style="font-size: 0.9rem;">Add a plan to get started</p>
+  </div>
+  <button class="btn btn-outline" onclick="clearCart()" style="width: 100%; margin-top: 16px; display: none;" id="clear-btn">Clear Cart</button>
+</div>
+
+<!-- ====== CART BUTTON ====== -->
+<button class="cart-toggle" onclick="toggleCart()" id="cart-btn">
+  🛒
+  <div class="cart-badge" id="cart-count" style="display: none;">0</div>
+</button>
+
+<!-- ====== FOOTER ====== -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo"><img src="images/nxxt-logo.jpg" alt="NXXT Mobile" style="height:45px;width:auto;"></a>
+        <p>NXXT Mobile connects qualifying households to free wireless service through our authorized ETC partners under the federal Lifeline program.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Lifeline</a></li>
+          <li><a href="products.html">Shop Plans</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><span class="icon">📞</span><span><a href="tel:18887006998">1-888-700-6998</a></span></li>
+          <li><span class="icon">✉️</span><span><a href="mailto:info@nxxtcom.com">info@nxxtcom.com</a></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 NXXT Mobile LLC. All rights reserved.</p>
+      <p class="footer-disclaimer">Lifeline service is provided through our authorized ETC partners. NXXT Mobile is not itself an ETC.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+let cart = [];
+const stripe = Stripe('pk_live_YOUR_STRIPE_PUBLIC_KEY'); // Replace with actual key
+let cardElement;
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadCart();
+  initializeStripe();
+  document.getElementById('payment-form').addEventListener('submit', handlePayment);
+});
+
+function showPlans(type) {
+  document.getElementById('monthly-plans').style.display = type === 'monthly' ? 'grid' : 'none';
+  document.getElementById('annual-plans').style.display = type === 'annual' ? 'grid' : 'none';
+  document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function addToCart(id, name, price, period) {
+  const existingItem = cart.find(item => item.id === id);
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({ id, name, price, period, quantity: 1 });
+  }
+  saveCart();
+  updateCartDisplay();
+  showNotification(`${name} added to cart!`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  saveCart();
+  updateCartDisplay();
+}
+
+function clearCart() {
+  cart = [];
+  saveCart();
+  updateCartDisplay();
+}
+
+function updateCartDisplay() {
+  const container = document.getElementById('cart-items');
+  const badge = document.getElementById('cart-count');
+  const total = document.getElementById('cart-total');
+  const checkout = document.getElementById('checkout-section');
+  const emptyMsg = document.getElementById('empty-cart-msg');
+  const clearBtn = document.getElementById('clear-btn');
+
+  if (cart.length === 0) {
+    container.innerHTML = '';
+    badge.style.display = 'none';
+    total.style.display = 'none';
+    checkout.style.display = 'none';
+    emptyMsg.style.display = 'block';
+    clearBtn.style.display = 'none';
+    return;
+  }
+
+  badge.textContent = cart.length;
+  badge.style.display = 'flex';
+  total.style.display = 'block';
+  checkout.style.display = 'block';
+  emptyMsg.style.display = 'none';
+  clearBtn.style.display = 'block';
+
+  container.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-header">
+        <div>
+          <strong>${item.name}</strong><br>
+          <small>${item.period} — $${item.price.toFixed(2)} × ${item.quantity}</small>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">✕</button>
+      </div>
+      <div style="text-align: right; font-weight: 600; color: var(--green);">$${(item.price * item.quantity).toFixed(2)}</div>
+    </div>
+  `).join('');
+
+  const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  document.getElementById('total-amount').textContent = '$' + totalAmount.toFixed(2);
+}
+
+function toggleCart() {
+  document.getElementById('cart-panel').classList.toggle('open');
+}
+
+function saveCart() {
+  localStorage.setItem('nxxt-cart', JSON.stringify(cart));
+}
+
+function loadCart() {
+  const saved = localStorage.getItem('nxxt-cart');
+  if (saved) {
+    cart = JSON.parse(saved);
+    updateCartDisplay();
+  }
+}
+
+function initializeStripe() {
+  const elements = stripe.elements();
+  cardElement = elements.create('card');
+  const cardElementContainer = document.getElementById('card-element');
+  if (cardElementContainer) {
+    cardElement.mount('#card-element');
+    cardElement.addEventListener('change', displayCardErrors);
+  }
+}
+
+function displayCardErrors(event) {
+  const errors = document.getElementById('card-errors');
+  errors.textContent = event.error ? event.error.message : '';
+}
+
+async function handlePayment(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  // Create payment intent on your backend
+  const response = await fetch('/api/create-payment-intent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      amount: Math.round(totalAmount * 100),
+      email: email,
+      cart: cart
+    })
+  });
+
+  const { clientSecret } = await response.json();
+  
+  // Confirm payment with Stripe
+  const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+    payment_method: {
+      card: cardElement,
+      billing_details: { email: email }
+    }
+  });
+
+  if (error) {
+    document.getElementById('card-errors').textContent = error.message;
+  } else if (paymentIntent.status === 'succeeded') {
+    clearCart();
+    showNotification('Payment successful! Check your email for confirmation.', true);
+    toggleCart();
+  }
+}
+
+function showNotification(msg, success = false) {
+  const div = document.createElement('div');
+  div.style.cssText = `
+    position: fixed; top: 24px; right: 24px; padding: 16px 24px; 
+    background: ${success ? '#4caf50' : 'var(--green)'}; color: white;
+    border-radius: 8px; z-index: 9999; animation: slideIn 0.3s;
+  `;
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+
+// Mobile hamburger menu
+document.querySelector('.nav-hamburger').addEventListener('click', function() {
+  document.querySelector('.nav-mobile').style.display = 
+    document.querySelector('.nav-mobile').style.display === 'block' ? 'none' : 'block';
+  this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+});
+</script>
+
+</body>
+</html>
